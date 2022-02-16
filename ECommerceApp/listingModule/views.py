@@ -53,7 +53,7 @@ class PromotionsView(generics.GenericAPIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     def get_queryset(self, request):
-        queryset = Products.objects.all().order_by('-discount')[:5]
+        queryset = Products.objects.all().order_by('-discount')[:10]
         return queryset
 
     def get(self, request):
@@ -66,7 +66,7 @@ class HotProductsView(generics.GenericAPIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     def get_queryset(request):
-        queryset = Products.objects.all().order_by('-sold_qt')[:5]
+        queryset = Products.objects.all().order_by('-sold_qt')[:10]
         return queryset
 
     def get(self, request):
@@ -80,7 +80,7 @@ class LatestProductsView(generics.GenericAPIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     def get_queryset(self, request):
-        queryset = Products.objects.all().order_by('-added_at')[:5]
+        queryset = Products.objects.all().order_by('-added_at')[:10]
         return queryset
 
     def get(self, request):
