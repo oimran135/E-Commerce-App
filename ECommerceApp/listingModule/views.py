@@ -31,7 +31,7 @@ class AllProducts(generics.GenericAPIView):
         return queryset
 
     def get(self, request):
-        queryset = self.get_queryset(request)
+        queryset = AllProducts.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -44,7 +44,7 @@ class CategoriesView(generics.GenericAPIView):
         return queryset
 
     def get(self, request):
-        queryset = self.get_queryset(request)
+        queryset = CategoriesView.get_queryset(request)
         serializer = CategorySerializer(queryset, many=True)
         return Response(serializer.data)
         
@@ -57,7 +57,7 @@ class PromotionsView(generics.GenericAPIView):
         return queryset
 
     def get(self, request):
-        queryset = self.get_queryset(request)
+        queryset = PromotionsView.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -79,12 +79,12 @@ class LatestProductsView(generics.GenericAPIView):
     
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get_queryset(self, request):
+    def get_queryset(request):
         queryset = Products.objects.all().order_by('-added_at')[:10]
         return queryset
 
     def get(self, request):
-        queryset = self.get_queryset(request)
+        queryset = LatestProductsView.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -121,12 +121,12 @@ class WishListAdd(generics.GenericAPIView):
 
 class WishListShow(generics.GenericAPIView):
 
-    def get_queryset(self, request):
+    def get_queryset(request):
         queryset = UserWishList.objects.all()
         return queryset
     
     def get(self, request):
-        queryset = self.get_queryset(queryset)
+        queryset = WishListShow.get_queryset(queryset)
         serializer = WishListSerializer(queryset, many=True)
         return Response(serializer.data)
 
