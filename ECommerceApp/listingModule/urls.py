@@ -4,8 +4,8 @@ from . import views
 urlpatterns = [
     path('register/', views.RegisterView.as_view()), #checked
     path('login/', views.LoginView.as_view()), #checked
-    path('hot-products/', views.HotProductsView.as_view()), #checked
-    path('new-arrivals/', views.LatestProductsView.as_view()), #checked
+    path('hot-products/', views.HotProductsView.as_view()), #checked #checked
+    path('new-arrivals/', views.LatestProductsView.as_view()), #checked #checked
     path('categories/', views.CategoriesView.as_view()), #checked
     path('all-products/', views.AllProducts.as_view()), #checked
     path('promotions/', views.PromotionsView.as_view()), #checked

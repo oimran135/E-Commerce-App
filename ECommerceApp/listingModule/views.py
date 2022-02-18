@@ -8,12 +8,15 @@ from .serializers import (RegisterSerializer, LoginSerializer,
                          ProductSerializer, CategorySerializer, UserFavouritesSerializer)
 
 class RegisterView(generics.GenericAPIView):
+    
+    serializer_class = RegisterSerializer
+
     def post(self, request):
-        serialized = RegisterSerializer(data = request.data)
-        if serialized.is_valid():
-            serialized.save()
-            return Response(serialized.data, status=status.HTTP_201_CREATED)
-        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(generics.GenericAPIView):
     
@@ -54,12 +57,12 @@ class PromotionsView(generics.GenericAPIView):
     
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get_queryset(self, request):
+    def get_queryset(request):
         queryset = Products.objects.all().order_by('-discount')[:5]
         return queryset
 
     def get(self, request):
-        queryset = self.get_queryset(request)
+        queryset = PromotionsView.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -107,8 +110,6 @@ class UserPartialUpdateView(generics.GenericAPIView):
         queryset = Users.objects.get(pk=pk)
         return queryset
 
-    
-
     def put(self, request, pk=None):
         queryset = Users.objects.get(pk=pk)
         serializer = UserSerializer(instance=queryset, data=request.data, partial=True)
@@ -129,15 +130,15 @@ class WishListAdd(generics.GenericAPIView):
 
 class WishListShow(generics.GenericAPIView):
 
-    def get_queryset(request):
+    def get_queryset(self, request):
         queryset = UserWishList.objects.all()
         return queryset
     
-    def get(request):
-        queryset = WishListShow.get_queryset(queryset)
+    def get(self, request):
+        queryset = self.get_queryset(queryset)
         serializer = WishListSerializer(queryset, many=True)
         return Response(serializer.data)
-
+        
 class FavouritesAPI(generics.GenericAPIView):
     
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
