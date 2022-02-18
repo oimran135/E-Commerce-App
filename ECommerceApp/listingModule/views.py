@@ -18,6 +18,7 @@ class RegisterView(generics.GenericAPIView):
 class LoginView(generics.GenericAPIView):
     
     def post(self, request):
+        type(request)
         serialized = LoginSerializer(data = request.data)
         serialized.is_valid(raise_exception= True)
         return Response(serialized.data, status=status.HTTP_200_OK)
@@ -31,9 +32,10 @@ class AllProducts(generics.GenericAPIView):
         return queryset
 
     def get(self, request):
-        queryset = AllProducts.get_queryset(request)
+        queryset = self.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
+
 
 class CategoriesView(generics.GenericAPIView):
     
@@ -44,20 +46,20 @@ class CategoriesView(generics.GenericAPIView):
         return queryset
 
     def get(self, request):
-        queryset = CategoriesView.get_queryset(request)
+        queryset = self.get_queryset(request)
         serializer = CategorySerializer(queryset, many=True)
         return Response(serializer.data)
-        
+
 class PromotionsView(generics.GenericAPIView):
     
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     def get_queryset(self, request):
-        queryset = Products.objects.all().order_by('-discount')[:10]
+        queryset = Products.objects.all().order_by('-discount')[:5]
         return queryset
 
     def get(self, request):
-        queryset = PromotionsView.get_queryset(request)
+        queryset = self.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -92,7 +94,7 @@ class UserProfileView(generics.GenericAPIView):
 
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get(self, request, pk=None):
+    def get(request, pk=None):
         queryset = Users.objects.get(pk=pk)
         serializer = UserSerializer(queryset)
         return Response(serializer.data)
@@ -100,6 +102,12 @@ class UserProfileView(generics.GenericAPIView):
 class UserPartialUpdateView(generics.GenericAPIView):
 
     parser_classes = [JSONParser, MultiPartParser, FormParser, JSONParser]
+
+    def get_queryset(request, pk=None):
+        queryset = Users.objects.get(pk=pk)
+        return queryset
+
+    
 
     def put(self, request, pk=None):
         queryset = Users.objects.get(pk=pk)
@@ -125,7 +133,7 @@ class WishListShow(generics.GenericAPIView):
         queryset = UserWishList.objects.all()
         return queryset
     
-    def get(self, request):
+    def get(request):
         queryset = WishListShow.get_queryset(queryset)
         serializer = WishListSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -134,7 +142,7 @@ class FavouritesAPI(generics.GenericAPIView):
     
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get(self, request, pk=None):
+    def get(request, pk=None):
         queryset = Users.objects.get(pk=pk)
         serialized = UserFavouritesSerializer(queryset)
         return Response(serialized.data, status=status.HTTP_200_OK)
@@ -150,7 +158,7 @@ class OrdersAPI(generics.GenericAPIView):
 
 class OrdersCheckout(generics.GenericAPIView):
     
-    def get(self, request, pk=None):
+    def get(selfrequest, pk=None):
         order = UserOrders.objects.get(pk = pk)
         serialized = OrderSerializer(order)
         data = serialized.data
