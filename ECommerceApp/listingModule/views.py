@@ -97,7 +97,7 @@ class UserProfileView(generics.GenericAPIView):
 
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get(request, pk=None):
+    def get(self, request, pk=None):
         queryset = Users.objects.get(pk=pk)
         serializer = UserSerializer(queryset)
         return Response(serializer.data)
@@ -138,15 +138,21 @@ class WishListShow(generics.GenericAPIView):
         queryset = self.get_queryset(queryset)
         serializer = WishListSerializer(queryset, many=True)
         return Response(serializer.data)
-        
+
 class FavouritesAPI(generics.GenericAPIView):
     
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get(request, pk=None):
+    def get(self, request, pk=None):
         queryset = Users.objects.get(pk=pk)
         serialized = UserFavouritesSerializer(queryset)
-        return Response(serialized.data, status=status.HTTP_200_OK)
+        serialized_fav = serialized.data['favourites']
+        new_list = []
+        for id in serialized_fav:
+            queryset1 = Products.objects.get(pk = id)
+            serialized1 = ProductSerializer(queryset1)
+            new_list.append(serialized1.data)
+        return Response({'User':serialized.data['name'], 'favourites':new_list}, status=status.HTTP_200_OK)
 
 class OrdersAPI(generics.GenericAPIView):
     
