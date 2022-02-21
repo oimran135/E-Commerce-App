@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib import auth
 from .models import ProductCategories, UserOrders, Users, Products, UserWishList
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length = 68, min_length= 6, write_only = True)
@@ -24,9 +25,17 @@ class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         max_length=255, min_length=3, read_only=True)
 
+    tokens = serializers.SerializerMethodField()
+    def get_tokens(self, obj):
+        user = Users.objects.get(email=obj['email'])
+        return {
+            'refresh': user.tokens()['refresh'],
+            'access': user.tokens()['access']
+        }
+
     class Meta:
         model = Users
-        fields = ['email', 'password', 'username']
+        fields = ['email', 'password', 'username', 'tokens']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -38,7 +47,8 @@ class LoginSerializer(serializers.ModelSerializer):
 
         return{
             'email':user.email,
-            'username':user.username
+            'username':user.username,
+            'tokens':user.tokens
         }
 
 class UserSerializer(serializers.ModelSerializer):

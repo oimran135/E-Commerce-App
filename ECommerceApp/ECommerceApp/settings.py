@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'listingModule',
     'corsheaders',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,12 @@ DATABASES = {
 'HOST': 'localhost',
 'PORT': '5432',
 }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 

@@ -1,6 +1,7 @@
 from random import choices
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from rest_framework_simplejwt.tokens import RefreshToken
 
 def UserImages(instance, filename):
     return '/'.join( ['images', 'Users', str(instance.id), filename] )
@@ -18,6 +19,8 @@ class UserManager(BaseUserManager):
     
     def create_user(self, username, email, password = None):
         
+        if username is None:
+            raise TypeError('Users should have a username.')
         if email is None:
             raise TypeError('Users should have an Email.')
 
@@ -60,7 +63,14 @@ class Users(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.username
+        return self.email
+
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
+        }
 
 class UserLogs(models.Model):
     logID = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
