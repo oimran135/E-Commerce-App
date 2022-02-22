@@ -107,10 +107,11 @@ class UserOrders(models.Model):
     OPTIONS = (('Cash on Delivery','Cash on Delivery'), 
                ('Credit/Debit Card', 'Credit/Debit Card'))
 
-    orderID = models.AutoField(primary_key=True, unique=True, blank=False, null=False)
+    id = models.AutoField(primary_key=True, unique=True, blank=False, null=False)
     userID = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
     products = models.ManyToManyField(Products)
     paymentMethod = models.CharField(max_length=100, choices = OPTIONS)
+    received = models.BooleanField(default=False)
 
     @property
     def total_price(self):
@@ -119,7 +120,7 @@ class UserOrders(models.Model):
         return queryset["total_price"]
 
 class UserWishList(models.Model):
-    wishID = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
+    id = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
     user = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
     title = models.CharField(max_length=100, blank=True, null=True)
     brand_name = models.CharField(max_length=100, blank=True, null=True)
@@ -129,7 +130,7 @@ class UserWishList(models.Model):
         return self.title
 
 class UserAddress(models.Model):
-    houseID = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
+    id = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
     userID = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
     address = models.TextField(blank=False, null=False)
     houseDescription = models.TextField(blank=True, null=True)

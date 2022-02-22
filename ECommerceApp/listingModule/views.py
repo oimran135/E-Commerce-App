@@ -165,7 +165,7 @@ class OrdersAPI(generics.GenericAPIView):
 
 class OrdersCheckout(generics.GenericAPIView):
     
-    def get(selfrequest, pk=None):
+    def get(self, request, pk=None):
         order = UserOrders.objects.get(pk = pk)
         serialized = OrderSerializer(order)
         data = serialized.data

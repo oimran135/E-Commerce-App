@@ -9,7 +9,7 @@ urlpatterns = [
     path('categories/', views.CategoriesView.as_view()), #checked
     path('all-products/', views.AllProducts.as_view()), #checked
     path('promotions/', views.PromotionsView.as_view()), #checked
-    path('user/<int:pk>/order/place/', views.OrdersAPI.as_view()), 
+    path('user/<int:pk>/checkout/', views.OrdersAPI.as_view()), 
     #path('user/<int:pk>/order/checkout/', views.OrdersCheckout.as_view()), 
     path('wish-list/<int:pk>/', views.WishListShow.as_view()), 
     path('wish-list/add-New/', views.WishListAdd.as_view()), 

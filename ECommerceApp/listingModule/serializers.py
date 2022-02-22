@@ -86,35 +86,10 @@ class OrderSerializer(serializers.ModelSerializer):
         model = UserOrders
         fields = '__all__'
 
-    # def create(self, validated_data):
-    #     products_data = validated_data.pop('products', None)
-    #     item = UserOrders.objects.create(**validated_data)
-    #     products = []
-    #     if products_data is not None:
-    #         for product in products_data:
-    #             product_id = product.pop('id', None)
-    #             product_data, _ = Products.objects.get_or_create(id=product_id, defaults=product)
-    #             products.append(product_data)
-    #             item.products.add(*products)
-    #     item.save()
-    #     return item
 
 class UserFavouritesSerializer(serializers.ModelSerializer):
     #products_data = ProductSerializer(write_only=True, many=True)
     class Meta:
         model = Users
         fields = ['name', 'favourites']
-
-    # def create(self, validated_data):
-    #     products_data = validated_data.pop('favourites', None)
-    #     item = Users.objects.create(**validated_data)
-    #     products = []
-    #     if products_data is not None:
-    #         for product in products_data:
-    #             product_id = product.pop('id', None)
-    #             product_data, _ = Products.objects.get_or_create(id=product_id, defaults=product)
-    #             products.append(product_data)
-    #             item.products.add(*products)
-    #     item.save()
-    #     return item
     
