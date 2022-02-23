@@ -35,7 +35,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ['email', 'password', 'username', 'tokens']
+        fields = ['id', 'email', 'password', 'username', 'tokens']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -46,6 +46,7 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed('The email or password is incorrect')
 
         return{
+            'id':user.id,
             'email':user.email,
             'username':user.username,
             'tokens':user.tokens
@@ -55,7 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Users
-        fields = ['id', 'name', 'username', 'email', 'contactNo', 'image', 'gender']
+        fields = ['id', 'name', 'username', 'email', 'contactNo', 'image', 'gender', 'tokens']
 
 class CategorySerializer(serializers.ModelSerializer):
 
@@ -84,7 +85,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserOrders
-        fields = '__all__'
+        fields = ['userID', 'products', 'paymentMethod']
 
 
 class UserFavouritesSerializer(serializers.ModelSerializer):

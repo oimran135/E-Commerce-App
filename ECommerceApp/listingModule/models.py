@@ -63,7 +63,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)
@@ -71,6 +71,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         }
+
 
 class UserLogs(models.Model):
     logID = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
