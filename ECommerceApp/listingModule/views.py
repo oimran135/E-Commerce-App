@@ -96,6 +96,8 @@ class LatestProductsView(generics.GenericAPIView):
 
 class UserProfileView(generics.GenericAPIView):
 
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     def get(self, request, pk=None):
