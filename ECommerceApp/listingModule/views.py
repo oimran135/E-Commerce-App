@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Users, UserOrders, Products, ProductCategories, UserWishList
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import (RegisterSerializer, LoginSerializer,
+from .serializers import (ProfileViewSerializer, RegisterSerializer, LoginSerializer,
                          OrderSerializer, UserSerializer, WishListSerializer,
                          ProductSerializer, CategorySerializer, UserFavouritesSerializer)
 
@@ -100,7 +100,7 @@ class UserProfileView(generics.GenericAPIView):
 
     def get(self, request, pk=None):
         queryset = Users.objects.get(pk=pk)
-        serializer = UserSerializer(queryset)
+        serializer = ProfileViewSerializer(queryset)
         return Response(serializer.data)
 
 class UserPartialUpdateView(generics.GenericAPIView):
@@ -139,8 +139,8 @@ class WishListShow(generics.GenericAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self, request):
-        queryset = UserWishList.objects.all()
+    def get_queryset(self, request, pk=None):
+        queryset = UserWishList.objects.get(pk=pk)
         return queryset
     
     def get(self, request):

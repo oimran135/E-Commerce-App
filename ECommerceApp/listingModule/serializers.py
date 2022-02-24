@@ -28,14 +28,11 @@ class LoginSerializer(serializers.ModelSerializer):
     tokens = serializers.SerializerMethodField()
     def get_tokens(self, obj):
         user = Users.objects.get(email=obj['email'])
-        return {
-            'refresh': user.tokens()['refresh'],
-            'access': user.tokens()['access']
-        }
+        return user.tokens()['access']
 
     class Meta:
         model = Users
-        fields = ['id', 'email', 'password', 'username', 'tokens']
+        fields = ['id', 'email', 'password', 'username', "tokens"]
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -58,6 +55,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = Users
         fields = ['id', 'name', 'username', 'email', 'contactNo', 'image', 'gender', 'tokens']
 
+class ProfileViewSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Users
+        fields = ['id', 'name', 'username', 'email', 'contactNo', 'image', 'gender']
+
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -69,7 +72,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
         fields = ['id', 'title', 'image', 'price', 'category', 'quantity', 
-        'sold_qt', 'description', 'added_at', 'discount']
+        'sold_qt', 'description', 'added_at', 'discount', 'img']
 
 class WishListSerializer(serializers.ModelSerializer):
 

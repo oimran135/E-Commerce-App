@@ -99,14 +99,16 @@ class Products(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=ProductImages, max_length = 255, blank = True, null = True)
-    
+    img = models.TextField(blank=True, null=True)
+
+
     def __str__(self):
         return self.title
 
 class UserOrders(models.Model):
 
     OPTIONS = (('Cash on Delivery','Cash on Delivery'), 
-               ('Credit/Debit Card', 'Credit/Debit Card'))
+               ('Card Payment', 'Card Payment'))
 
     id = models.AutoField(primary_key=True, unique=True, blank=False, null=False)
     userID = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
