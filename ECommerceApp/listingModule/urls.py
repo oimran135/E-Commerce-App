@@ -15,9 +15,9 @@ urlpatterns = [
     path('promotions/', views.PromotionsView.as_view()), #checked
     path('checkout/', views.OrdersAPI.as_view()), 
     #path('user/<int:pk>/order/checkout/', views.OrdersCheckout.as_view()), 
-    path('wish-list/<int:pk>/', views.WishListShow.as_view()), 
+    path('wish-list/', views.WishListShow.as_view()), 
     path('make-request/', views.WishListAdd.as_view()), 
-    path('user/<int:pk>', views.UserProfileView.as_view()), #checked
+    path('user/', views.UserProfileView.as_view()), #checked
     path('user/update/', views.UserPartialUpdateView.as_view()), #checked
-    path('user/<int:pk>/favourites/', views.FavouritesAPI.as_view()), #checked
+    path('favourites/', views.FavouritesAPI.as_view()), #checked
 ]

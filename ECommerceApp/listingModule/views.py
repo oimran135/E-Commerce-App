@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Users, UserOrders, Products, ProductCategories, UserWishList
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
@@ -39,7 +40,6 @@ class AllProducts(generics.GenericAPIView):
         queryset = self.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
-
 
 class CategoriesView(generics.GenericAPIView):
     
@@ -100,8 +100,10 @@ class UserProfileView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
+    
     def get(self, request, pk=None):
-        queryset = Users.objects.get(pk=pk)
+        user_id = request.user.id
+        queryset = Users.objects.get(pk=user_id)
         serializer = ProfileViewSerializer(queryset)
         return Response(serializer.data)
 
@@ -111,13 +113,14 @@ class UserPartialUpdateView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, MultiPartParser, FormParser, JSONParser]
 
-    def get_queryset(request, pk=None):
-        queryset = Users.objects.get(pk=pk)
-        return queryset
+    # def get_queryset(request, pk=None):
+    #     queryset = Users.objects.get(pk=pk)
+    #     return queryset
 
     def put(self, request, pk=None):
-        queryset = Users.objects.get(pk=pk)
-        serializer = UserSerializer(instance=queryset, data=request.data, partial=True)
+        user_id = request.user.id
+        queryset = Users.objects.get(pk=user_id)
+        serializer = ProfileViewSerializer(instance=queryset, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         data = serializer.data
@@ -136,18 +139,18 @@ class WishListAdd(generics.GenericAPIView):
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class WishListShow(generics.GenericAPIView):
+class WishListShow(APIView):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
-    def get_queryset(self, request, pk=None):
-        queryset = UserWishList.objects.get(pk=pk)
-        return queryset
+    parser_classes = [JSONParser, MultiPartParser, FormParser, JSONParser]
     
     def get(self, request):
-        queryset = self.get_queryset(queryset)
+        user_id = request.user.id
+        queryset = UserWishList.objects.all().filter(user=user_id)
+        print(queryset)
         serializer = WishListSerializer(queryset, many=True)
+        print(serializer.data)
         return Response(serializer.data)
 
 class FavouritesAPI(generics.GenericAPIView):
@@ -157,7 +160,8 @@ class FavouritesAPI(generics.GenericAPIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     def get(self, request, pk=None):
-        queryset = Users.objects.get(pk=pk)
+        user_id = request.user.id
+        queryset = Users.objects.get(pk=user_id)
         print(queryset)
         serialized = UserFavouritesSerializer(queryset)
         serialized_fav = serialized.data['favourites']

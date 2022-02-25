@@ -78,7 +78,7 @@ class WishListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserWishList
-        fields = ['user', 'title', 'brand_name', 'productURL']
+        fields = ['id','title', 'brand_name', 'productURL']
 
     # def create(self, validated_data):
     #      return Use.objects.create(**validated_data)
