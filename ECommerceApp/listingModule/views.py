@@ -160,16 +160,10 @@ class FavouritesAPI(generics.GenericAPIView):
 
     def get(self, request):
         user_id = request.user.id
-        queryset = Users.objects.filter(user=user_id)
+        queryset = Users.objects.get(pk=user_id)
         print(queryset)
         serialized = UserFavouritesSerializer(queryset)
-        serialized_fav = serialized.data['favourites']
-        new_list = []
-        for id in serialized_fav:
-            queryset1 = Products.objects.get(pk = id)
-            serialized1 = ProductSerializer(queryset1)
-            new_list.append(serialized1.data)
-        return Response({'User':serialized.data['name'], 'favourites':new_list}, status=status.HTTP_200_OK)
+        return Response(serialized.data, status=status.HTTP_200_OK)
 
 class OrdersAPI(generics.GenericAPIView):
 

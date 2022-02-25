@@ -102,4 +102,4 @@ class UserFavouritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = ['name', 'favourites']
-    
+        depth = 1
