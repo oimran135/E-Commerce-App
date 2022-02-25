@@ -13,7 +13,8 @@ urlpatterns = [
     path('categories/', views.CategoriesView.as_view()), #checked
     path('all-products/', views.AllProducts.as_view()), #checked
     path('promotions/', views.PromotionsView.as_view()), #checked
-    path('checkout/', views.OrdersAPI.as_view()), 
+    path('checkout/', views.OrdersAPI.as_view()),
+    path('orders/', views.OrdersView.as_view()),
     #path('user/<int:pk>/order/checkout/', views.OrdersCheckout.as_view()), 
     path('wish-list/', views.WishListShow.as_view()), 
     path('make-request/', views.WishListAdd.as_view()), 

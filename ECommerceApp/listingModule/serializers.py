@@ -53,13 +53,13 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Users
-        fields = ['id', 'name', 'username', 'email', 'contactNo', 'image', 'gender', 'tokens']
+        fields = ['name', 'username', 'email', 'contactNo', 'image', 'gender', 'tokens']
 
 class ProfileViewSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Users
-        fields = ['id', 'name', 'username', 'email', 'contactNo', 'image', 'gender']
+        fields = ['name', 'username', 'email', 'contactNo', 'image', 'gender']
 
 class CategorySerializer(serializers.ModelSerializer):
 
@@ -78,7 +78,13 @@ class WishListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserWishList
-        fields = ['id','title', 'brand_name', 'productURL']
+        fields = ['user','title', 'brand_name', 'productURL']
+
+class RequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserWishList,
+        fields = ["user", "title", "brand_name", "productURL"]
 
     # def create(self, validated_data):
     #      return Use.objects.create(**validated_data)
@@ -88,7 +94,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserOrders
-        fields = ['userID', 'products', 'paymentMethod']
+        fields = ['user', 'products', 'paymentMethod']
 
 
 class UserFavouritesSerializer(serializers.ModelSerializer):

@@ -75,7 +75,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
 class UserLogs(models.Model):
     logID = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
-    userID = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
+    user = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
     LoginDateTime = models.DateTimeField(auto_now_add=True)
     logoutDateTime = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -111,7 +111,7 @@ class UserOrders(models.Model):
                ('Card Payment', 'Card Payment'))
 
     id = models.AutoField(primary_key=True, unique=True, blank=False, null=False)
-    userID = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
+    user = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
     products = models.ManyToManyField(Products)
     paymentMethod = models.CharField(max_length=100, choices = OPTIONS)
     received = models.BooleanField(default=False)
@@ -134,7 +134,7 @@ class UserWishList(models.Model):
 
 class UserAddress(models.Model):
     id = models.AutoField(primary_key = True, unique=True, blank=False, null=False)
-    userID = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
+    user = models.ForeignKey(Users, on_delete = models.CASCADE, null = False, blank = False)
     address = models.TextField(blank=False, null=False)
     houseDescription = models.TextField(blank=True, null=True)
 

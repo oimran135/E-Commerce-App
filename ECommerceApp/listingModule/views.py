@@ -101,7 +101,7 @@ class UserProfileView(generics.GenericAPIView):
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     
-    def get(self, request, pk=None):
+    def get(self, request):
         user_id = request.user.id
         queryset = Users.objects.get(pk=user_id)
         serializer = ProfileViewSerializer(queryset)
@@ -117,7 +117,7 @@ class UserPartialUpdateView(generics.GenericAPIView):
     #     queryset = Users.objects.get(pk=pk)
     #     return queryset
 
-    def put(self, request, pk=None):
+    def put(self, request):
         user_id = request.user.id
         queryset = Users.objects.get(pk=user_id)
         serializer = ProfileViewSerializer(instance=queryset, data=request.data, partial=True)
@@ -132,10 +132,11 @@ class WishListAdd(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
+        request.data['user'] = request.user.id
         serialized = WishListSerializer(data = request.data)
-        print(serialized)
         if serialized.is_valid():
             serialized.save()
+            print(serialized.data)
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -148,9 +149,7 @@ class WishListShow(APIView):
     def get(self, request):
         user_id = request.user.id
         queryset = UserWishList.objects.all().filter(user=user_id)
-        print(queryset)
         serializer = WishListSerializer(queryset, many=True)
-        print(serializer.data)
         return Response(serializer.data)
 
 class FavouritesAPI(generics.GenericAPIView):
@@ -159,9 +158,9 @@ class FavouritesAPI(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
-    def get(self, request, pk=None):
+    def get(self, request):
         user_id = request.user.id
-        queryset = Users.objects.get(pk=user_id)
+        queryset = Users.objects.filter(user=user_id)
         print(queryset)
         serialized = UserFavouritesSerializer(queryset)
         serialized_fav = serialized.data['favourites']
@@ -178,22 +177,18 @@ class OrdersAPI(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        request.data['user'] = request.user.id
         serialized = OrderSerializer(data = request.data)
-        # userID = serialized.initial_data['userID']
-        # userdata = Users.objects.get(pk = userID)
-        # serialized1 = UserSerializer(userdata)
-        # variable = serialized1.data['tokens']['access']
-        # print(variable)
-        #print(JWTAuthentication.authenticate(request))
         if serialized.is_valid():
             serialized.save()
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class OrdersCheckout(generics.GenericAPIView):
+class OrdersView(generics.GenericAPIView):
     
-    def get(self, request, pk=None):
-        order = UserOrders.objects.get(pk = pk)
-        serialized = OrderSerializer(order)
-        data = serialized.data
+    def get(self, request):
+        user_id= request.user.id
+        queryset = UserOrders.objects.all().filter(user = user_id)
+        serializer = OrderSerializer(queryset, many=True)
+        data = serializer.data
         return Response({"data":data, "success":True, "message":"data found"}, status=status.HTTP_200_OK)
