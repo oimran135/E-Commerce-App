@@ -55,6 +55,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = Users
         fields = ['name', 'username', 'email', 'contactNo', 'image', 'gender', 'tokens']
 
+class PasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length = 68, min_length= 6, write_only = False)
+    new_password = serializers.CharField(max_length = 68, min_length= 6, write_only = True)
+    
+    class Meta:
+        model = Users
+
 class ProfileViewSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -95,6 +102,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOrders
         fields = ['user', 'products', 'paymentMethod']
+        # depth = 1
 
 
 class UserFavouritesSerializer(serializers.ModelSerializer):

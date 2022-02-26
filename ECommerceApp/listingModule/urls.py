@@ -9,6 +9,7 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view()), #checked #not registering to database from frontend
     path('login/', views.LoginView.as_view()), #checked
     path('hot-products/', views.HotProductsView.as_view()), #checked
+    path('product/<int:pk>/', views.Product.as_view()),
     path('new-arrivals/', views.LatestProductsView.as_view()), #checked
     path('categories/', views.CategoriesView.as_view()), #checked
     path('all-products/', views.AllProducts.as_view()), #checked
@@ -21,4 +22,5 @@ urlpatterns = [
     path('user/', views.UserProfileView.as_view()), #checked
     path('user/update/', views.UserPartialUpdateView.as_view()), #checked
     path('favourites/', views.FavouritesAPI.as_view()), #checked
+    #path('password/update/', views.NewPasswordView.as_view()),
 ]

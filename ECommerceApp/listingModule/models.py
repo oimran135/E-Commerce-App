@@ -115,6 +115,8 @@ class UserOrders(models.Model):
     products = models.ManyToManyField(Products)
     paymentMethod = models.CharField(max_length=100, choices = OPTIONS)
     received = models.BooleanField(default=False)
+    placed = models.DateTimeField(auto_now_add = True, blank=True, null=True)
+
 
     @property
     def total_price(self):

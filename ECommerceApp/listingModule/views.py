@@ -7,8 +7,9 @@ from .models import Users, UserOrders, Products, ProductCategories, UserWishList
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import (ProfileViewSerializer, RegisterSerializer, LoginSerializer,
-                         OrderSerializer, UserSerializer, WishListSerializer,
+                         OrderSerializer, UserSerializer, WishListSerializer, PasswordSerializer,
                          ProductSerializer, CategorySerializer, UserFavouritesSerializer)
+#from ECommerceApp.listingModule import serializers
 
 class RegisterView(generics.GenericAPIView):
     
@@ -40,6 +41,14 @@ class AllProducts(generics.GenericAPIView):
         queryset = self.get_queryset(request)
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class Product(generics.GenericAPIView):
+
+    def get(self, request, pk=None):
+        queryset = Products.objects.get(pk=pk)
+        serializer = ProductSerializer(queryset)
+        return Response(serializer.data)
+
 
 class CategoriesView(generics.GenericAPIView):
     
@@ -107,6 +116,27 @@ class UserProfileView(generics.GenericAPIView):
         serializer = ProfileViewSerializer(queryset)
         return Response(serializer.data)
 
+# class NewPasswordView(generics.GenericAPIView):
+        
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self, request):
+#         queryset = self.request.id
+#         return queryset
+
+#     def put(self, request):
+#         self.queryset = self.get_object()
+#         serializer = self.get_serializer(data=request.data)
+        
+#         if serializer.is_valid():
+#             if not self.object.check_password(serializer.data.get("old_password")):
+#                 return Response({"current_password":"Your current password is wrong"}, status=status.HTTP_400_BAD_REQUEST)
+#             self.object.set_password(serializer.data.get("new_password"))
+#             self.object.save
+#             return Response({"Password":"Password updated Successfully"}, status=status.HTTP_200_OK)
+
+
 class UserPartialUpdateView(generics.GenericAPIView):
 
     authentication_classes = [JWTAuthentication]
@@ -124,7 +154,7 @@ class UserPartialUpdateView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         data = serializer.data
-        return Response({"data":data, "success":True, "message":"user updated successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class WishListAdd(generics.GenericAPIView):
 
@@ -161,7 +191,7 @@ class FavouritesAPI(generics.GenericAPIView):
     def post(self, request, pk=None):
         user_id = request.user.id
         product = Products.objects.get(pk=pk)
-        
+
 
     def get(self, request):
         user_id = request.user.id
@@ -190,4 +220,4 @@ class OrdersView(generics.GenericAPIView):
         queryset = UserOrders.objects.all().filter(user = user_id)
         serializer = OrderSerializer(queryset, many=True)
         data = serializer.data
-        return Response({"data":data, "success":True, "message":"data found"}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
