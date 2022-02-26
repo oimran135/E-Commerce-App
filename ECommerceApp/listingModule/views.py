@@ -158,6 +158,11 @@ class FavouritesAPI(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
+    def post(self, request, pk=None):
+        user_id = request.user.id
+        product = Products.objects.get(pk=pk)
+        
+
     def get(self, request):
         user_id = request.user.id
         queryset = Users.objects.get(pk=user_id)
