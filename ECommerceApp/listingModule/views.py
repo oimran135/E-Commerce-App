@@ -7,7 +7,7 @@ from .models import Users, UserOrders, Products, ProductCategories, UserWishList
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import (ProfileViewSerializer, RegisterSerializer, LoginSerializer,
-                         OrderSerializer, UserSerializer, WishListSerializer, PasswordSerializer,
+                         OrderSerializer, UserSerializer, WishListSerializer, OrderHistorySerializer,
                          ProductSerializer, CategorySerializer, UserFavouritesSerializer)
 #from ECommerceApp.listingModule import serializers
 
@@ -218,6 +218,5 @@ class OrdersView(generics.GenericAPIView):
     def get(self, request):
         user_id= request.user.id
         queryset = UserOrders.objects.all().filter(user = user_id)
-        serializer = OrderSerializer(queryset, many=True)
-        data = serializer.data
+        serializer = OrderHistorySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

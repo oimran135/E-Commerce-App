@@ -104,10 +104,17 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['user', 'products', 'paymentMethod']
         # depth = 1
 
+class OrderHistorySerializer(serializers.ModelSerializer):
+    #products_data = ProductSerializer(write_only=True, many=True)
+
+    class Meta:
+        model = UserOrders
+        fields = ['id', 'user', 'products', 'paymentMethod', 'placed']
+        depth = 1
+
 
 class UserFavouritesSerializer(serializers.ModelSerializer):
     #products_data = ProductSerializer(write_only=True, many=True)
     class Meta:
         model = Users
         fields = ['name', 'favourites']
-        depth = 1
