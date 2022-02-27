@@ -12,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*j$%z^y7c*lq8g4-4mm93&q%0as6itnyw4k=al=m@v*upaj#i3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ess-store.herokuapp.com', '127.0.0.1']
 AUTH_USER_MODEL = "listingModule.Users"
 
 
