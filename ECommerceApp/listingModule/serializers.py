@@ -109,7 +109,7 @@ class OrderHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserOrders
-        fields = ['id', 'user', 'products', 'paymentMethod', 'placed']
+        fields = ['id', 'products', 'paymentMethod', 'placed']
         depth = 1
 
 

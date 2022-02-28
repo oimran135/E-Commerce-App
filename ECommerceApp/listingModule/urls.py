@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
@@ -23,4 +23,5 @@ urlpatterns = [
     path('user/update/', views.UserPartialUpdateView.as_view()), #checked
     path('favourites/', views.FavouritesAPI.as_view()), #checked
     #path('update/password/', views.NewPasswordView.as_view()),
+    path('products', views.ProductQueryView.as_view()),
 ]

@@ -220,3 +220,21 @@ class OrdersView(generics.GenericAPIView):
         queryset = UserOrders.objects.all().filter(user = user_id)
         serializer = OrderHistorySerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ProductQueryView(generics.GenericAPIView):
+
+    def get_queryset(self):
+        products = Products.objects.all()
+        return products
+
+
+    def get(self, request, *args, **kwargs):
+        try:
+            id = request.query_params["id"]
+            if id != None:
+                car = Products.objects.get(id=id)
+                serializer = ProductSerializer(car)
+        except:
+            cars = self.get_queryset()
+            serializer = ProductSerializer(cars, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
