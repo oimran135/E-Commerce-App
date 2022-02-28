@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib import auth
+from django.contrib.auth.password_validation import validate_password
 from .models import ProductCategories, UserOrders, Users, Products, UserWishList
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
@@ -118,3 +119,12 @@ class UserFavouritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = ['name', 'favourites']
+
+class PasswordUpdateSerializer(serializers.Serializer):
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    # def validate_new_password(self, value):
+    #     validate_password(value)
+    #     return value

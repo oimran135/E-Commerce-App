@@ -22,6 +22,6 @@ urlpatterns = [
     path('user/', views.UserProfileView.as_view()), #checked
     path('user/update/', views.UserPartialUpdateView.as_view()), #checked
     path('favourites/', views.FavouritesAPI.as_view()), #checked
-    #path('update/password/', views.NewPasswordView.as_view()),
+    path('update/password/', views.UpdatePassword.as_view()),
     path('products', views.ProductQueryView.as_view()),
 ]

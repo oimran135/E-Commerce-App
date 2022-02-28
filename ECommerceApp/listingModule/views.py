@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Users, UserOrders, Products, ProductCategories, UserWishList
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser, JSONParser
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import (ProfileViewSerializer, RegisterSerializer, LoginSerializer,
+from .serializers import (ProfileViewSerializer, RegisterSerializer, LoginSerializer, PasswordUpdateSerializer,
                          OrderSerializer, UserSerializer, WishListSerializer, OrderHistorySerializer,
                          ProductSerializer, CategorySerializer, UserFavouritesSerializer)
 #from ECommerceApp.listingModule import serializers
@@ -116,25 +116,31 @@ class UserProfileView(generics.GenericAPIView):
         serializer = ProfileViewSerializer(queryset)
         return Response(serializer.data)
 
-# class NewPasswordView(generics.GenericAPIView):
-        
-#     authentication_classes = [JWTAuthentication]
-#     permission_classes = [IsAuthenticated]
+class UpdatePassword(generics.GenericAPIView):
+    """
+    An endpoint for changing password.
+    """
+    permission_classes = (IsAuthenticated, )
 
-#     def get_queryset(self, request):
-#         queryset = self.request.id
-#         return queryset
+    def get_object(self, queryset=None):
+        return self.request.user
 
-#     def put(self, request):
-#         self.queryset = self.get_object()
-#         serializer = self.get_serializer(data=request.data)
-        
-#         if serializer.is_valid():
-#             if not self.object.check_password(serializer.data.get("old_password")):
-#                 return Response({"current_password":"Your current password is wrong"}, status=status.HTTP_400_BAD_REQUEST)
-#             self.object.set_password(serializer.data.get("new_password"))
-#             self.object.save
-#             return Response({"Password":"Password updated Successfully"}, status=status.HTTP_200_OK)
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = PasswordUpdateSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            old_password = serializer.data.get("old_password")
+            if not self.object.check_password(old_password):
+                return Response({"old_password": ["Wrong password."]}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response({"message":"Password Updated Successfully"}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserPartialUpdateView(generics.GenericAPIView):
