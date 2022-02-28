@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 
@@ -15,7 +16,7 @@ SECRET_KEY = 'django-insecure-*j$%z^y7c*lq8g4-4mm93&q%0as6itnyw4k=al=m@v*upaj#i3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*',]
 AUTH_USER_MODEL = "listingModule.Users"
 
 
@@ -32,6 +33,7 @@ INSTALLED_APPS = [
     'listingModule',
     'corsheaders',
     'rest_framework_simplejwt',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -45,6 +47,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'ECommerceApp.urls'
 
@@ -82,6 +86,9 @@ DATABASES = {
 'PORT': '5432',
 }
 }
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -162,6 +169,9 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
 
 
 # Default primary key field type
